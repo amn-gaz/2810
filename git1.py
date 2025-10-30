@@ -23,16 +23,16 @@ class GitAutomation:
             print("🪄 Репозиторий не найден. Выполняю git init...")
             self.run_command("git init")
         else:
-            print("✅ Репозиторий уже инициализирован.")
+            print(" Репозиторий уже инициализирован.")
 
     def add_all(self):
         """Добавляет все изменения"""
-        print("➕ Добавляю изменения (git add .)...")
+        print(" Добавляю изменения (git add .)...")
         self.run_command("git add .")
 
     def show_status(self):
         """Показывает текущее состояние репозитория"""
-        print("\n📋 Текущее состояние (git status):")
+        print("\n Текущее состояние (git status):")
         self.run_command("git status")
         print()
 
@@ -44,22 +44,22 @@ class GitAutomation:
         # Запрашиваем подтверждение
         confirm = input("Продолжить коммит? (y/N): ").strip().lower()
         if confirm != "y":
-            print("❌ Коммит отменён.")
+            print(" Коммит отменён.")
             return
 
         # Создаём сообщение с днём недели
         weekday = datetime.now().strftime("%A")  # День недели, например 'Tuesday'
         message = input("Введите сообщение для коммита: ")
         full_message = f"{weekday} commit: {message}"
-        print(f"💬 Коммит: {full_message}")
+        print(f" Коммит: {full_message}")
         self.run_command(f'git commit -m "{full_message}"')
 
     def push(self):
         """Отправляет изменения на удалённый репозиторий"""
-        print("🚀 Отправка изменений (git push)...")
+        print(" Отправка изменений (git push)...")
         result = self.run_command("git push")
         if "No configured push destination" in result.stderr:
-            print("\n⚠️ У репозитория не настроен remote.\n"
+            print("\n У репозитория не настроен remote.\n"
                   "Добавьте его командой:\n"
                   "git remote add origin <URL>\n"
                   "и затем выполните:\n"
