@@ -1,14 +1,8 @@
-import os
+import os, time
 
-# Ввод пути и расширения
-path = input("Введите путь к папке: ")
-ext = input("Введите расширение файла (например: .txt, .py, .jpg): ")
+cmd = input("Введите команду: ")
+start = time.time()        
+os.system(cmd)             
+end = time.time()          
 
-# Проверяем существование папки
-if not os.path.isdir(path):
-    print("Указанная папка не найдена.")
-else:
-    print(f"Файлы с расширением {ext}:")
-    for file in os.listdir(path):
-        if file.endswith(ext):
-            print(file)
+print(f"⏱ Время выполнения: {end - start:.3f} сек.")
