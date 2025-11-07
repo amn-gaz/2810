@@ -4,13 +4,17 @@ from datetime import datetime
 
 class GitAutomation:
     def __init__(self, repo_path="."):
+        # Указываем путь к репозиторию
         self.repo_path = os.path.abspath(repo_path)
+        # Переходим в этот путь
         os.chdir(self.repo_path)
+        # Проверяем, есть ли .git, если нет — создаём
         self.ensure_repo_initialized()
 
     def run_command(self, command):
-        """Выполняет системную команду и возвращает вывод"""
+        """Выполняет системную команду"""
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        # Если ошибка — выводим stderr, иначе stdout
         if result.returncode != 0:
             print(f"Ошибка при выполнении '{command}':\n{result.stderr}")
         else:
@@ -18,10 +22,10 @@ class GitAutomation:
         return result
 
     def ensure_repo_initialized(self):
-        """Проверяет, инициализирован ли Git-репозиторий, и если нет — выполняет git init"""
+        """Проверяет, инициализирован ли репозиторий"""
         if not os.path.exists(os.path.join(self.repo_path, ".git")):
             print("Репозиторий не найден. Выполняю git init...")
-            self.run_command("git init")
+            self.run_command("git init")  # создаём новый репозиторий
         else:
             print(" Репозиторий уже инициализирован.")
 
@@ -37,27 +41,31 @@ class GitAutomation:
         print()
 
     def commit(self):
-        """Перед коммитом показывает статус, затем выполняет git commit"""
-        # Показываем git status перед коммитом
+        """Создаёт коммит"""
+        # Показываем статус перед коммитом
         self.show_status()
 
-        # Запрашиваем подтверждение
+        # Спрашиваем подтверждение
         confirm = input("Продолжить коммит? (y/N): ").strip().lower()
         if confirm != "y":
             print(" Коммит отменён.")
             return
 
-        # Создаём сообщение с днём недели
-        weekday = datetime.now().strftime("%A")  # День недели, например 'Tuesday'
+        # Получаем день недели
+        weekday = datetime.now().strftime("%A")
+        # Просим ввести сообщение
         message = input("Введите сообщение для коммита: ")
+        # Полное сообщение
         full_message = f"{weekday} commit: {message}"
         print(f" Коммит: {full_message}")
+        # Выполняем git commit
         self.run_command(f'git commit -m "{full_message}"')
 
     def push(self):
-        """Отправляет изменения на удалённый репозиторий"""
+        """Отправляет изменения на GitHub"""
         print(" Отправка изменений (git push)...")
         result = self.run_command("git push")
+        # Если нет удалённого репозитория — подсказываем как добавить
         if "No configured push destination" in result.stderr:
             print("\n У репозитория не настроен remote.\n"
                   "Добавьте его командой:\n"
@@ -69,8 +77,8 @@ class GitAutomation:
 # Пример использования
 # ---------------------------
 if __name__ == "__main__":
-    git_auto = GitAutomation()
+    git_auto = GitAutomation()  # создаём объект
 
-    git_auto.add_all()
-    git_auto.commit()
-    git_auto.push()
+    git_auto.add_all()   # добавляем все файлы
+    git_auto.commit()    # делаем коммит
+    git_auto.push()      # отправляем на GitHub
