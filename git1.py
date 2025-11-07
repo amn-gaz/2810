@@ -20,7 +20,7 @@ class GitAutomation:
     def ensure_repo_initialized(self):
         """Проверяет, инициализирован ли Git-репозиторий, и если нет — выполняет git init"""
         if not os.path.exists(os.path.join(self.repo_path, ".git")):
-            print("🪄 Репозиторий не найден. Выполняю git init...")
+            print("Репозиторий не найден. Выполняю git init...")
             self.run_command("git init")
         else:
             print(" Репозиторий уже инициализирован.")
